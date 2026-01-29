@@ -6,14 +6,15 @@ import { ApiError } from "./utils/ApiError.js";
 import globalErrorHandler from "./middleware/globalErroHandler.js";
 import cookieParser from "cookie-parser";
 import { verifyJWT } from "./middleware/auth.js";
-import { clerkMiddleware } from '@clerk/express'
+import { clerkMiddleware } from "@clerk/express";
+import mongoose from "mongoose";
 const app = express();
 const port = ENV.PORT || 6000;
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(clerkMiddleware())
+app.use(clerkMiddleware());
 
 app.get(
   "/health",
@@ -30,7 +31,7 @@ app.use(globalErrorHandler);
 
 const startServer = async () => {
   try {
-    // await connectDB();
+    await connectDB();
     app.listen(ENV.PORT, () =>
       console.log("Server is running on port:", ENV.PORT),
     );
@@ -40,3 +41,13 @@ const startServer = async () => {
 };
 
 startServer();
+
+// Graceful shutdown
+const shutdown = async (signal) => {
+  console.log(`\n${signal} received. Closing MongoDB connection...`);
+  await mongoose.connection.close();
+  process.exit(0);
+};
+
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
