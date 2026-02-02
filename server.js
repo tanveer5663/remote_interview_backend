@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { clerkMiddleware } from "@clerk/express";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 
 import mongoose from "mongoose";
@@ -30,7 +31,7 @@ app.get(
 );
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
-
+app.use("/api/sessions", sessionRoutes);
 
 app.use(globalErrorHandler);
 
