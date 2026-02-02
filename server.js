@@ -2,11 +2,13 @@ import express from "express";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import { asyncHandler } from "./utils/asyncHandler.js";
-import { ApiError } from "./utils/ApiError.js";
+
 import globalErrorHandler from "./middleware/globalErroHandler.js";
 import cookieParser from "cookie-parser";
-import { verifyJWT } from "./middleware/auth.js";
+
 import { clerkMiddleware } from "@clerk/express";
+import authRoutes from "./routes/authRoutes.js";
+import { ApiResponse } from "./utils/ApiResponse.js";
 import mongoose from "mongoose";
 const app = express();
 const port = ENV.PORT || 6000;
@@ -17,15 +19,12 @@ app.use(cookieParser());
 app.use(clerkMiddleware());
 
 app.get(
-  "/health",
-
+  "/api/health",
   asyncHandler((req, res) => {
-    if (true) {
-      // throw new ApiError(420, "Testing ApiError");
-    }
-    res.status(200).json({ msg: "api is up and running" });
+    res.status(200).json(new ApiResponse(200, null, "api is up and running"));
   }),
 );
+app.use("/api/auth", authRoutes);
 
 app.use(globalErrorHandler);
 
