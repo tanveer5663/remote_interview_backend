@@ -19,6 +19,7 @@
     "express": "^5.2.1",
     "inngest": "^3.49.3",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.1.2"
+    "mongoose": "^9.1.2",
+    "stream-chat": "^9.31.0"
   }
 }

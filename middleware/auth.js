@@ -4,7 +4,7 @@ import { ENV } from "../lib/env.js";
 import jwt from "jsonwebtoken";
 import User from "../model/User.js";
 
-export const verifyJWT = asyncHandler(async (req, _, next) => {
+export const verifyJWT = asyncHandler(async (req, res, next) => {
   try {
     console.log(req.cookies, "cookies");
     const token =
