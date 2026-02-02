@@ -6,6 +6,8 @@ import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const signup = asyncHandler(async (req, res) => {
+  console.log("reqbody", req.body);
+
   const { email, password, name } = req.body;
 
   if (!email || !password || !name) {
@@ -67,7 +69,7 @@ export const login = asyncHandler(async (req, res) => {
       200,
       {
         ...user,
-       password: undefined,
+        password: undefined,
       },
       "Logged in successfully",
     ),
@@ -81,10 +83,9 @@ export const logout = asyncHandler(async (req, res) => {
 });
 
 export const checkAuth = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.userId).select("-password");
-  if (!user) {
-    return new ApiResponse(400, null, "User not found");
+  if (!req.user) {
+    throw new ApiError(400, "User not authenticated");
   }
 
-  res.status(200).json(new ApiResponse(200, user, "User found"));
+  res.status(200).json(new ApiResponse(200, req.user, "User found"));
 });

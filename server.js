@@ -10,11 +10,13 @@ import { clerkMiddleware } from "@clerk/express";
 import authRoutes from "./routes/authRoutes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 import mongoose from "mongoose";
+import cors from "cors";
 const app = express();
 const port = ENV.PORT || 6000;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 app.use(clerkMiddleware());
 
