@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { upsertStreamUser } from "../lib/stream.js";
 
 export const signup = asyncHandler(async (req, res) => {
   console.log("reqbody", req.body);
@@ -34,11 +35,19 @@ export const signup = asyncHandler(async (req, res) => {
 
   // jwt
   await generateTokenAndSetCookie(res, user._id);
+  await upsertStreamUser({
+    id: user._id.toString(),
+    name: user.name,
+    image: user.profileImage,
+  });
   res.status(201).json(
     new ApiResponse(
       201,
       {
         ...user._doc,
+        createdAt: undefined,
+        updatedAt: undefined,
+        __v: undefined,
         password: undefined,
       },
       "User created successfully",
@@ -64,11 +73,15 @@ export const login = asyncHandler(async (req, res) => {
   }
 
   await generateTokenAndSetCookie(res, user._id);
+
   res.status(200).json(
     new ApiResponse(
       200,
       {
         ...user,
+        createdAt: undefined,
+        updatedAt: undefined,
+        __v: undefined,
         password: undefined,
       },
       "Logged in successfully",
@@ -84,7 +97,7 @@ export const logout = asyncHandler(async (req, res) => {
 
 export const checkAuth = asyncHandler(async (req, res) => {
   if (!req.user) {
-    throw new ApiError(400, "User not authenticated");
+    throw new ApiError(401, "User not authenticated");
   }
 
   res.status(200).json(new ApiResponse(200, req.user, "User found"));
