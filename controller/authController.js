@@ -23,11 +23,13 @@ export const signup = asyncHandler(async (req, res) => {
   }
 
   const hashedPassword = await bcryptjs.hash(password, 10);
+  const userId = generateId(10);
 
   const user = new User({
     email,
     password: hashedPassword,
     name,
+    clerkId: userId,
   });
   console.log("user", user);
 
@@ -36,7 +38,7 @@ export const signup = asyncHandler(async (req, res) => {
   // jwt
   await generateTokenAndSetCookie(res, user._id);
   await upsertStreamUser({
-    id: user._id.toString(),
+    id: userId.toString(),
     name: user.name,
     image: user.profileImage,
   });
@@ -100,5 +102,19 @@ export const checkAuth = asyncHandler(async (req, res) => {
     throw new ApiError(401, "User not authenticated");
   }
 
-  res.status(200).json(new ApiResponse(200, req.user, "User found successfully"));
+  res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "User found successfully"));
 });
+
+function generateId(length = 10) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return result;
+}
