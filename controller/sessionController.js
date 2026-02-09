@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 export const createSession = asyncHandler(async (req, res) => {
   const { problem, difficulty } = req.body;
   const userId = req.user._id;
+   const clerkId = req.user.clerkId;
 
   if (!problem || !difficulty) {
     throw new ApiError(400, "Problem and difficulty are required");
@@ -25,7 +26,7 @@ export const createSession = asyncHandler(async (req, res) => {
   // create stream video call
   await streamClient.video.call("default", callId).getOrCreate({
     data: {
-      created_by_id: userId,
+      created_by_id: clerkId,
       custom: { problem, difficulty, sessionId: session._id.toString() },
     },
   });
@@ -33,8 +34,8 @@ export const createSession = asyncHandler(async (req, res) => {
   // chat messaging
   const channel = chatClient.channel("messaging", callId, {
     name: `${problem} Session`,
-    created_by_id: userId,
-    members: [userId],
+    created_by_id: clerkId,
+    members: [clerkId],
   });
 
   await channel.create();
