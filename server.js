@@ -19,7 +19,7 @@ const port = ENV.PORT || 6000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "http://localhost:5173/", credentials: true }));
 
 // app.use(clerkMiddleware());
 
@@ -38,9 +38,9 @@ app.use(globalErrorHandler);
 const startServer = async () => {
   try {
     await connectDB();
-    // app.listen(ENV.PORT, () =>
-    //   console.log("Server is running on port:", ENV.PORT),
-    // );
+    app.listen(ENV.PORT, () =>
+      console.log("Server is running on port:", ENV.PORT),
+    );
   } catch (error) {
     console.error("Error starting the server", error);
   }
@@ -57,6 +57,5 @@ const shutdown = async (signal) => {
 
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
-
 
 export default app;
