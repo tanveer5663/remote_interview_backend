@@ -6,7 +6,7 @@ import { asyncHandler } from "./utils/asyncHandler.js";
 import globalErrorHandler from "./middleware/globalErroHandler.js";
 import cookieParser from "cookie-parser";
 
-import { clerkMiddleware } from "@clerk/express";
+// import { clerkMiddleware } from "@clerk/express";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-app.use(clerkMiddleware());
+// app.use(clerkMiddleware());
 
 app.get(
   "/api/health",
@@ -38,9 +38,9 @@ app.use(globalErrorHandler);
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () =>
-      console.log("Server is running on port:", ENV.PORT),
-    );
+    // app.listen(ENV.PORT, () =>
+    //   console.log("Server is running on port:", ENV.PORT),
+    // );
   } catch (error) {
     console.error("Error starting the server", error);
   }
@@ -57,3 +57,6 @@ const shutdown = async (signal) => {
 
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
+
+
+export default app;
