@@ -11,7 +11,7 @@ export const getStreamToken = asyncHandler((req, res) => {
         token,
         userId: req.user.clerkId.toString(),
         userName: req.user.name,
-        userImage: req.user.image,
+        userImage: req.user.profileImage,
       },
       "Stream token generated successfully",
     ),
