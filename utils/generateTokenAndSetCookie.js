@@ -11,7 +11,7 @@ export const generateTokenAndSetCookie = (res, userId) => {
   res.cookie("token", token,  {
     httpOnly: true,
     secure: true,
-    SameSite:None
+ sameSite: "none"
    
   });
  
