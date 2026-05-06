@@ -11,7 +11,7 @@ import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
 import questionRouter from "./routes/questionRoutes.js";
-// import testRouter from "./routes/testRoutes.js";
+import testRouter from "./routes/testRoutes.js";
 
 import mongoose from "mongoose";
 import cors from "cors";
@@ -39,7 +39,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/questions", questionRouter);
-// app.use("/api/test", testRouter);
+app.use("/api/test", testRouter);
 
 app.use(globalErrorHandler);
 
