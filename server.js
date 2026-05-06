@@ -18,7 +18,13 @@ import cors from "cors";
 const app = express();
 const port = ENV.PORT || 6000;
 
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+
+app.use(
+  cors({
+    origin: ["https://remote-fronted.vercel.app", "http://localhost:5173"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 
