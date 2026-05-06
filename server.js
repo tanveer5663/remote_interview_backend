@@ -6,18 +6,19 @@ import { asyncHandler } from "./utils/asyncHandler.js";
 import globalErrorHandler from "./middleware/globalErroHandler.js";
 import cookieParser from "cookie-parser";
 
-// import { clerkMiddleware } from "@clerk/express";
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import { ApiResponse } from "./utils/ApiResponse.js";
+import questionRouter from "./routes/questionRoutes.js";
+import testRouter from "./routes/testRoutes.js";
 
 import mongoose from "mongoose";
 import cors from "cors";
 const app = express();
 const port = ENV.PORT || 6000;
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -32,6 +33,8 @@ app.get(
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
+app.use("/api/questions", questionRouter);
+app.use("/api/test", testRouter);
 
 app.use(globalErrorHandler);
 
