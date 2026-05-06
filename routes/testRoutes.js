@@ -7,7 +7,7 @@ import {
   result,
 } from "../controller/testController.js";
 import { verifyJWT } from "../middleware/auth.js";
-verifyJWT;
+
 const router = express.Router();
 
 router.get("/check", verifyJWT, checkTestAttempt);
